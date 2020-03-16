@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -39,58 +38,13 @@ public class SpringSecurityJwtApplication {
 
 }
 
-@RestController
-class HelloWorldController {
-
-	@Autowired
-	private AuthenticationManager authenticationManager;
-
-	@Autowired
-	private JwtUtil jwtTokenUtil;
-
-	@Autowired
-	private MyUserDetailsService userDetailsService;
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldController.class);
-
-	@RequestMapping({ "/hello" })
-	public String firstPage() {
-		LOGGER.info("Received request from /hello endpoint");
-		return "Hello World";
-	}
-
-	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-
-		LOGGER.info("Received request from /authenticate endpoint - attempting to authenticate user");
-
-		try {
-			authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
-			);
-		}
-		catch (BadCredentialsException e) {
-			throw new Exception("Incorrect username or password", e);
-		}
-
-
-		final UserDetails userDetails = userDetailsService
-				.loadUserByUsername(authenticationRequest.getUsername());
-
-		final String jwt = jwtTokenUtil.generateToken(userDetails);
-
-		LOGGER.info("User authentication complete - returning jwt token to client");
-		return ResponseEntity.ok(new AuthenticationResponse(jwt));
-	}
-
-}
 
 @EnableWebSecurity
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
-	private UserDetailsService myUserDetailsService;
-	
+	private LibraryUserDetailsService myUserDetailsService;
+
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
 
