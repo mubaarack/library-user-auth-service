@@ -1,6 +1,5 @@
 package com.teal.library.springsecurityjwt.controllers;
-
-import com.teal.library.springsecurityjwt.DataAccess;
+import com.teal.library.springsecurityjwt.HibernateORM;
 import com.teal.library.springsecurityjwt.LibraryRegistrationService;
 import com.teal.library.springsecurityjwt.LibraryUserDetailsService;
 import com.teal.library.springsecurityjwt.models.AuthenticationRequest;
@@ -19,8 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.xml.crypto.Data;
+import org.hibernate.Session;
+import org.hibernate.query.*;
+import java.util.List;
 
 @RestController
 class LoginController {
@@ -36,6 +36,9 @@ class LoginController {
     @Autowired
     private LibraryUserDetailsService userDetailsService;
 
+    @Autowired
+    private HibernateORM hibernate;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
 
     @RequestMapping({ "/api/hello" })
@@ -48,13 +51,19 @@ class LoginController {
     public int RegisterUser(@RequestBody UserForm user){
         LOGGER.info("Received request from /register endpoint");
         //check if username exists if no then:
-        try{
-            registrationService.RegisterUser(user);
-        }
-        catch (Exception e){
-            LOGGER.info(e.getMessage());
-        }
+        Session session = hibernate.getSessionFactory().openSession();
 
+        Query query = session.createQuery("from User where username = :username");
+        query.setParameter("username", user.getUsername());
+        List<?> list = query.list();
+        if(list.size() == 0) {
+            try {
+                registrationService.RegisterUser(user);
+                return 1;
+            } catch (Exception e) {
+                LOGGER.info(e.getMessage());
+            }
+        }
         return -1;
     }
 
