@@ -10,12 +10,12 @@ import java.util.List;
 
 public class DataAccess {
 
-    public int AddUser(User user, int readerid){
+    public int AddUser(UserModel userModel, int readerid){
         try{
             Session session = HibernateORM.getSessionFactory().openSession();
             session.beginTransaction();
-            user.setReaderID(readerid);
-            session.save(user);
+            userModel.setReaderID(readerid);
+            session.save(userModel);
             session.getTransaction().commit();
             return 1;
         }
@@ -26,18 +26,18 @@ public class DataAccess {
     }
     public int AddReader(UserForm user){
         try{
-            Reader newReader = new Reader();
-            newReader.setFirstname(user.getFirstname());
-            newReader.setLastname(user.getLastname());
-            newReader.setAddress(user.getAddress());
-            newReader.setEmail(user.getEmail());
-            newReader.setRtype(user.getType());
-            newReader.setZipcode(user.getZipcode());
+            ReaderModel newReaderModel = new ReaderModel();
+            newReaderModel.setFirstname(user.getFirstname());
+            newReaderModel.setLastname(user.getLastname());
+            newReaderModel.setAddress(user.getAddress());
+            newReaderModel.setEmail(user.getEmail());
+            newReaderModel.setRtype(user.getType());
+            newReaderModel.setZipcode(user.getZipcode());
             Session session = HibernateORM.getSessionFactory().openSession();
             session.beginTransaction();
-            session.save(newReader);
+            session.save(newReaderModel);
             session.getTransaction().commit();
-            return newReader.getReaderid();
+            return newReaderModel.getReaderid();
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -46,22 +46,22 @@ public class DataAccess {
     }
     public boolean ExistsUser(String username){
         Session session = HibernateORM.getSessionFactory().openSession();
-        Query query = session.createQuery("from User where username = :username");
+        Query query = session.createQuery("from UserModel where username = :username");
         query.setParameter("username", username);
-        List<User> list = query.list();
+        List<UserModel> list = query.list();
         if(list.size() == 0)
             return false;
         else
             return true;
     }
-    public User ValidateUser(String username){
+    public UserModel ValidateUser(String username){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Session session = HibernateORM.getSessionFactory().openSession();
-        Query query = session.createQuery("from User where username = :username");
+        Query query = session.createQuery("from UserModel where username = :username");
         query.setParameter("username", username);
         //query.setParameter("password", passwordEncoder.encode(password));
-        List<User> list = query.list();
-        User user  = list.get(0);
-        return user;
+        List<UserModel> list = query.list();
+        UserModel userModel = list.get(0);
+        return userModel;
     }
 }

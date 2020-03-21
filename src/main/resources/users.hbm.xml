@@ -3,7 +3,7 @@
         "-//Hibernate/Hibernate Mapping DTD//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="com.teal.library.springsecurityjwt.models.User" table="users">
+    <class name="com.teal.library.springsecurityjwt.models.UserModel" table="users">
         <id name="readerID" type="int" column="readerid">
             <generator class="assigned"/>
         </id>

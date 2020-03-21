@@ -1,12 +1,10 @@
 package com.teal.library.springsecurityjwt;
 
-import com.teal.library.springsecurityjwt.models.User;
+import com.teal.library.springsecurityjwt.models.UserModel;
 import com.teal.library.springsecurityjwt.viewmodels.UserForm;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.xml.crypto.Data;
 
 @Service
 public class LibraryRegistrationService {
@@ -18,16 +16,16 @@ public class LibraryRegistrationService {
 //        }
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         DataAccess db = new DataAccess();
-            User newUser = new User();
-            newUser.setFirstname(user.getFirstname());
-            newUser.setLastname(user.getLastname());
-            newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            newUser.setEmail(user.getEmail());
-            newUser.setRole("Admin");
-            newUser.setUsername(user.getUsername());
+            UserModel newUserModel = new UserModel();
+            newUserModel.setFirstname(user.getFirstname());
+            newUserModel.setLastname(user.getLastname());
+            newUserModel.setPassword(passwordEncoder.encode(user.getPassword()));
+            newUserModel.setEmail(user.getEmail());
+            newUserModel.setRole("Admin");
+            newUserModel.setUsername(user.getUsername());
             int readerid = db.AddReader(user);
             if(readerid != -1)
-                return db.AddUser(newUser, readerid);
+                return db.AddUser(newUserModel, readerid);
             else
                 return readerid;
     }

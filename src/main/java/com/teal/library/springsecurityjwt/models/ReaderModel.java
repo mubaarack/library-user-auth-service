@@ -1,6 +1,6 @@
 package com.teal.library.springsecurityjwt.models;
 
-public class Reader {
+public class ReaderModel {
     private int readerid;
     private String firstname;
     private String lastname;
