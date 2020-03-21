@@ -2,10 +2,11 @@ package com.teal.library.springsecurityjwt;
 
 import com.teal.library.springsecurityjwt.models.User;
 import com.teal.library.springsecurityjwt.viewmodels.UserForm;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.xml.crypto.Data;
 
 @Service
 public class LibraryRegistrationService {
@@ -16,19 +17,18 @@ public class LibraryRegistrationService {
 //                    "There is an account with that email address:" + user.getEmail());
 //        }
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-        User newUser = new User();
-        newUser.setFirstname(user.getFirstname());
-        newUser.setLastname(user.getLastname());
-        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        newUser.setEmail(user.getEmail());
-        newUser.setRole("Admin");
-        newUser.setUsername(user.getUsername());
-        DataAccess db  = new DataAccess();
-        int readerid = db.addReader(user);
-        if(readerid != -1)
-            return db.addUser(newUser, readerid);
-        else
-            return readerid;
+        DataAccess db = new DataAccess();
+            User newUser = new User();
+            newUser.setFirstname(user.getFirstname());
+            newUser.setLastname(user.getLastname());
+            newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            newUser.setEmail(user.getEmail());
+            newUser.setRole("Admin");
+            newUser.setUsername(user.getUsername());
+            int readerid = db.AddReader(user);
+            if(readerid != -1)
+                return db.AddUser(newUser, readerid);
+            else
+                return readerid;
     }
 }

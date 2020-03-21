@@ -1,4 +1,5 @@
 package com.teal.library.springsecurityjwt.controllers;
+import com.teal.library.springsecurityjwt.DataAccess;
 import com.teal.library.springsecurityjwt.HibernateORM;
 import com.teal.library.springsecurityjwt.LibraryRegistrationService;
 import com.teal.library.springsecurityjwt.LibraryUserDetailsService;
@@ -14,6 +15,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,13 +53,9 @@ class LoginController {
     @RequestMapping(value = "/api/register", method = RequestMethod.POST)
     public int RegisterUser(@RequestBody UserForm user){
         LOGGER.info("Received request from /register endpoint");
-        //check if username exists if no then:
-        Session session = hibernate.getSessionFactory().openSession();
-
-        Query query = session.createQuery("from User where username = :username");
-        query.setParameter("username", user.getUsername());
-        List<?> list = query.list();
-        if(list.size() == 0) {
+        DataAccess db = new DataAccess();
+        boolean flag = db.ExistsUser(user.getUsername());
+        if(!flag) {
             try {
                 registrationService.RegisterUser(user);
                 return 1;
@@ -94,6 +93,7 @@ class LoginController {
             LOGGER.info("Received request from /authenticate endpoint - attempting to authenticate" +authenticationRequest.getUsername()+" "+ authenticationRequest.getPassword());
 
             try {
+                PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                 authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
                 );

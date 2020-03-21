@@ -3,10 +3,14 @@ import com.teal.library.springsecurityjwt.viewmodels.UserForm;
 import org.hibernate.Session;
 import org.hibernate.query.*;
 import com.teal.library.springsecurityjwt.models.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.List;
 
 public class DataAccess {
 
-    public int addUser(User user, int readerid){
+    public int AddUser(User user, int readerid){
         try{
             Session session = HibernateORM.getSessionFactory().openSession();
             session.beginTransaction();
@@ -20,7 +24,7 @@ public class DataAccess {
             return -1;
         }
     }
-    public int addReader(UserForm user){
+    public int AddReader(UserForm user){
         try{
             Reader newReader = new Reader();
             newReader.setFirstname(user.getFirstname());
@@ -39,5 +43,25 @@ public class DataAccess {
             System.out.println(e.getMessage());
             return -1;
         }
+    }
+    public boolean ExistsUser(String username){
+        Session session = HibernateORM.getSessionFactory().openSession();
+        Query query = session.createQuery("from User where username = :username");
+        query.setParameter("username", username);
+        List<User> list = query.list();
+        if(list.size() == 0)
+            return false;
+        else
+            return true;
+    }
+    public User ValidateUser(String username){
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        Session session = HibernateORM.getSessionFactory().openSession();
+        Query query = session.createQuery("from User where username = :username");
+        query.setParameter("username", username);
+        //query.setParameter("password", passwordEncoder.encode(password));
+        List<User> list = query.list();
+        User user  = list.get(0);
+        return user;
     }
 }
