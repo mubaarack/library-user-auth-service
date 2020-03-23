@@ -1,5 +1,6 @@
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 module.exports = {
+    entry: "./src/main/resources/src/ts/app.ts",
     mode: 'development',
     output: {
         filename: 'app.js',
@@ -10,21 +11,12 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: [
-                            ["env", {
-                                "targets": {
-                                    "browsers": ["last 2 Chrome versions"]
-                                }
-                            }]
-                        ],
-                        compact: false
-                    }
-                },
-            },
+                test: /\.(ts|tsx)$/,
+                use: 'ts-loader'
+            }
         ],
     },
+    resolve: {
+        extensions: [ '.tsx', '.ts', '.js' ],
+    }
 };

@@ -16,8 +16,11 @@ body {
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
 }
 .inputs {
-  width: 100%;
+  width: 270px;
 }
 .bg-dark {
   color: white;
+}
+.hidden{
+  display: none;
 }
