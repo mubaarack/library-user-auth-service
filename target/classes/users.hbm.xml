@@ -1,0 +1,29 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.teal.library.springsecurityjwt.models.UserModel" table="users">
+        <id name="readerID" type="int" column="readerid">
+            <generator class="assigned"/>
+        </id>
+        <property name="username">
+            <column name="username"/>
+        </property>
+        <property name="firstname">
+            <column name="firstname"/>
+        </property>
+        <property name="lastname">
+            <column name="lastname"/>
+        </property>
+        <property name="email">
+            <column name="email"/>
+        </property>
+        <property name="password">
+            <column name="password"/>
+        </property>
+        <property name="role">
+            <column name="role"/>
+        </property>
+    </class>
+</hibernate-mapping>
