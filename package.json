@@ -16,7 +16,7 @@
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
     "babel": "^6.23.0",
-    "babel-loader": "^8.1.0",
+    "babel-loader": "^8.3.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "bootstrap": "^4.4.1",
@@ -28,10 +28,10 @@
     "panini": "^1.6.3",
     "popper.js": "^1.16.1",
     "rimraf": "^3.0.2",
-    "ts-loader": "^6.2.2",
+    "ts-loader": "^9.4.2",
     "typescript": "^3.8.3",
     "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^4.42.0",
-    "webpack-stream": "^5.2.1"
+    "webpack": "^5.75.0",
+    "webpack-stream": "^7.0.0"
   }
 }
